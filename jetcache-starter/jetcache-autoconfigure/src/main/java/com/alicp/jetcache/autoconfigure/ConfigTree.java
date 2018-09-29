@@ -12,6 +12,8 @@ import java.util.Map;
  * Created on 2017/11/20.
  *
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * 用于获取配置文件信息得，根据前缀匹配
  */
 public class ConfigTree {
     private ConfigurableEnvironment environment;

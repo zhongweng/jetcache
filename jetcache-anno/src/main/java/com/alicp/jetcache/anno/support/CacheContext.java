@@ -19,12 +19,12 @@ import com.alicp.jetcache.support.DefaultCacheMonitorManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
+ * 根据CacheConfig 创建 Cache
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
  */
 public class CacheContext {
@@ -72,12 +72,17 @@ public class CacheContext {
 
     public CacheInvokeContext createCacheInvokeContext(ConfigMap configMap) {
         CacheInvokeContext c = newCacheInvokeContext();
+
         c.setCacheFunction((invokeContext, cacheAnnoConfig) -> {
             Cache cache = cacheAnnoConfig.getCache();
             if (cache == null) {
+                // 解析好的cacheAnnoConfig model
                 if (cacheAnnoConfig instanceof CachedAnnoConfig) {
+                    // 则可以根据注解信息创建cache了
                     cache = createCacheByCachedConfig((CachedAnnoConfig) cacheAnnoConfig, invokeContext);
+
                 } else if ((cacheAnnoConfig instanceof CacheInvalidateAnnoConfig) || (cacheAnnoConfig instanceof CacheUpdateAnnoConfig)) {
+                    // CacheInvalidateAnno  &  CacheUpdateAnno model
                     CacheInvokeConfig cacheDefineConfig = configMap.getByCacheName(cacheAnnoConfig.getArea(), cacheAnnoConfig.getName());
                     if (cacheDefineConfig == null) {
                         String message = "can't find @Cached definition with area=" + cacheAnnoConfig.getArea()
@@ -89,6 +94,8 @@ public class CacheContext {
                     }
                     cache = createCacheByCachedConfig(cacheDefineConfig.getCachedAnnoConfig(), invokeContext);
                 }
+
+                // 将cache ref 放到 config 一份
                 cacheAnnoConfig.setCache(cache);
             }
             return cache;
@@ -104,6 +111,7 @@ public class CacheContext {
             cacheName = configProvider.createCacheNameGenerator(invokeContext.getHiddenPackages())
                     .generateCacheName(invokeContext.getMethod(), invokeContext.getTargetObject());
         }
+        // todo 创建cache 方法
         Cache cache = __createOrGetCache(ac, area, cacheName);
         return cache;
     }
@@ -111,6 +119,8 @@ public class CacheContext {
     public Cache __createOrGetCache(CachedAnnoConfig cachedAnnoConfig, String area, String cacheName) {
         String fullCacheName = area + "_" + cacheName;
         Cache cache = cacheManager.get(fullCacheName);
+
+        // 用了double check
         if (cache == null) {
             synchronized (this) {
                 cache = cacheManager.get(fullCacheName);
@@ -128,6 +138,13 @@ public class CacheContext {
         return cache;
     }
 
+    /**
+     * todo 创建cache 方法
+     * @param cachedAnnoConfig
+     * @param area
+     * @param cacheName
+     * @return
+     */
     protected Cache buildCache(CachedAnnoConfig cachedAnnoConfig, String area, String cacheName) {
         Cache cache;
         if (cachedAnnoConfig.getCacheType() == CacheType.LOCAL) {
@@ -135,6 +152,7 @@ public class CacheContext {
         } else if (cachedAnnoConfig.getCacheType() == CacheType.REMOTE) {
             cache = buildRemote(cachedAnnoConfig, area, cacheName);
         } else {
+            // 否则就是local 和 remote 都创建
             Cache local = buildLocal(cachedAnnoConfig, area);
             Cache remote = buildRemote(cachedAnnoConfig, area, cacheName);
 
@@ -147,6 +165,7 @@ public class CacheContext {
             }
 
             boolean useExpireOfSubCache = cachedAnnoConfig.getLocalExpire() > 0;
+            // todo 多级缓存创建
             cache = MultiLevelCacheBuilder.createMultiLevelCacheBuilder()
                     .expireAfterWrite(remote.config().getExpireAfterWriteInMillis(), TimeUnit.MILLISECONDS)
                     .addCache(local, remote)
@@ -170,7 +189,16 @@ public class CacheContext {
         return cache;
     }
 
+    /**
+     * 创建远程缓存
+     * @param cachedAnnoConfig
+     * @param area
+     * @param cacheName
+     * @return
+     */
     protected Cache buildRemote(CachedAnnoConfig cachedAnnoConfig, String area, String cacheName) {
+
+        // 远程缓存都是External
         ExternalCacheBuilder cacheBuilder = (ExternalCacheBuilder) globalCacheConfig.getRemoteCacheBuilders().get(area);
         if (cacheBuilder == null) {
             throw new CacheConfigException("no remote cache builder: " + area);
@@ -195,10 +223,19 @@ public class CacheContext {
             cacheBuilder.setValueDecoder(configProvider.parseValueDecoder(cachedAnnoConfig.getSerialPolicy()));
         }
         cacheBuilder.setCacheNullValue(cachedAnnoConfig.isCacheNullValue());
+
         return cacheBuilder.buildCache();
     }
 
+    /**
+     * todo 创建本地缓存
+     * @param cachedAnnoConfig
+     * @param area
+     * @return
+     */
     protected Cache buildLocal(CachedAnnoConfig cachedAnnoConfig, String area) {
+
+        // 本地缓存都是使用的嵌入缓存
         EmbeddedCacheBuilder cacheBuilder = (EmbeddedCacheBuilder) globalCacheConfig.getLocalCacheBuilders().get(area);
         if (cacheBuilder == null) {
             throw new CacheConfigException("no local cache builder: " + area);

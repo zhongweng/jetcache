@@ -41,6 +41,7 @@ public class JetCacheInterceptor implements MethodInterceptor, ApplicationContex
         }
 
         Method method = invocation.getMethod();
+        // 获取的是Joinpoint
         Object obj = invocation.getThis();
         CacheInvokeConfig cac = null;
         if (obj != null) {
@@ -69,6 +70,7 @@ public class JetCacheInterceptor implements MethodInterceptor, ApplicationContex
         context.setArgs(invocation.getArguments());
         context.setCacheInvokeConfig(cac);
         context.setHiddenPackages(globalCacheConfig.getHiddenPackages());
+
         return CacheHandler.invoke(context);
     }
 

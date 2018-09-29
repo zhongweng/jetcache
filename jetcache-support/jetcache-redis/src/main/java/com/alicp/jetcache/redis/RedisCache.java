@@ -43,6 +43,13 @@ public class RedisCache<K, V> extends AbstractExternalCache<K, V> {
         return config;
     }
 
+    /**
+     * 脱去外衣
+     * @param clazz the proprietary class or interface of the underlying
+     *              concrete cache. It is this type that is returned.
+     * @param <T>
+     * @return
+     */
     @Override
     public <T> T unwrap(Class<T> clazz) {
         if (clazz.equals(Pool.class)) {
@@ -63,6 +70,7 @@ public class RedisCache<K, V> extends AbstractExternalCache<K, V> {
             return new CacheGetResult<V>(CacheResultCode.FAIL, CacheResult.MSG_ILLEGAL_ARGUMENT, null);
         }
         try (Jedis jedis = pool.getResource()) {
+            // 获得内部key
             byte[] newKey = buildKey(key);
             byte[] bytes = jedis.get(newKey);
             if (bytes != null) {

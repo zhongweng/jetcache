@@ -16,6 +16,11 @@ public abstract class AbstractValueDecoder implements Function<byte[], Object> {
         this.useIdentityNumber = useIdentityNumber;
     }
 
+    /**
+     * 将byte[] 转为int
+     * @param buf
+     * @return
+     */
     protected int parseHeader(byte[] buf) {
         int x = 0;
         x = x | (buf[0] & 0xFF);
@@ -35,9 +40,20 @@ public abstract class AbstractValueDecoder implements Function<byte[], Object> {
         try {
             if (useIdentityNumber) {
                 DecoderMap.registerBuildInDecoder();
+                /**
+                 * 解析数据流头部
+                 */
                 int identityNumber = parseHeader(buffer);
+
+                /**
+                 * 根据数据流头部编号 获取对应解析器
+                 */
                 AbstractValueDecoder decoder = DecoderMap.getDecoder(identityNumber);
+
                 Objects.requireNonNull(decoder, "no decoder for identity number:" + identityNumber);
+                /**
+                 * 解析获得对象
+                 */
                 return decoder.doApply(buffer);
             } else {
                 return doApply(buffer);

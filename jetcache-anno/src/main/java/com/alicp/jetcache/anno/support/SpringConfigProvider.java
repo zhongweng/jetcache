@@ -14,6 +14,8 @@ import java.util.function.Function;
  * Created on 2016/12/1.
  *
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * spring 注解支持类 关键是持有ApplicationContext, 可以创建 SpringCacheContext
  */
 public class SpringConfigProvider extends ConfigProvider implements ApplicationContextAware {
     private ApplicationContext applicationContext;

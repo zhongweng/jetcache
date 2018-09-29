@@ -14,6 +14,10 @@ import java.util.function.Function;
 public class CacheConfig<K, V> implements Cloneable {
     private long expireAfterWriteInMillis = CacheConsts.DEFAULT_EXPIRE * 1000L;
     private long expireAfterAccessInMillis = 0;
+
+    /**
+     * key 转换器
+     */
     private Function<K, Object> keyConvertor;
 
     private CacheLoader<K, V> loader;

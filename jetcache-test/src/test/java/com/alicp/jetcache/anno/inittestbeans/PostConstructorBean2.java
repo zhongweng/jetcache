@@ -14,7 +14,10 @@ public class PostConstructorBean2 extends CreateCacheInitTestBean {
 
     @PostConstruct
     public void doTest() {
+        System.out.println(">>>PostConstructorBean2");
         super.doTest();
+        System.out.println("<<<PostConstructorBean2");
+
     }
 
 

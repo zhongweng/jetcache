@@ -32,11 +32,14 @@ public class CaffeineCache<K, V> extends AbstractEmbeddedCache<K, V> {
     @Override
     @SuppressWarnings("unchecked")
     protected InnerMap createAreaCache() {
+
         Caffeine<Object, Object> builder = Caffeine.newBuilder();
         builder.maximumSize(config.getLimit());
         final boolean isExpireAfterAccess = config.isExpireAfterAccess();
         final long expireAfterAccess = config.getExpireAfterAccessInMillis();
+
         builder.expireAfter(new Expiry<Object, CacheValueHolder>() {
+
             private long getRestTimeInNanos(CacheValueHolder value) {
                 long now = System.currentTimeMillis();
                 long ttl = value.getExpireTime() - now;

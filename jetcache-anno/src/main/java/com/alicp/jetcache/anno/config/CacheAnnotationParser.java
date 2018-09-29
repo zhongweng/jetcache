@@ -18,10 +18,10 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * todo 关键注解解析类，植入spring的扩展入口
  */
 public class CacheAnnotationParser implements BeanDefinitionParser {
 

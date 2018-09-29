@@ -15,6 +15,7 @@ public class MethodCacheInitTestBean {
     private TestBean testBean;
 
     public void doTest() {
+        System.out.println("MethodCacheInitTestBean");
         Assert.assertEquals(testBean.count(), testBean.count());
     }
 

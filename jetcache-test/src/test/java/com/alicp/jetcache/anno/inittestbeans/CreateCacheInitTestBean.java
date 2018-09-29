@@ -10,6 +10,7 @@ import org.junit.Assert;
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
  */
 public class CreateCacheInitTestBean {
+    
     @CreateCache
     private Cache cache;
 

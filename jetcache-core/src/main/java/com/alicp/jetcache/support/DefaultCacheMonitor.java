@@ -49,6 +49,11 @@ public class DefaultCacheMonitor implements CacheMonitor {
 
     @Override
     public synchronized void afterOperation(CacheEvent event) {
+
+        /**
+         * notify 后调用config中注册的Monitor的afterOperation
+         * 其实可以用guava的 EventBus 做 更易扩展
+         */
         if (event instanceof CacheGetEvent) {
             CacheGetEvent e = (CacheGetEvent) event;
             afterGet(e.getMillis(), e.getKey(), e.getResult());

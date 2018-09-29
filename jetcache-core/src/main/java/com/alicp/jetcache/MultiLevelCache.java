@@ -1,9 +1,13 @@
 package com.alicp.jetcache;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * Created on 16/9/13.
@@ -184,6 +188,11 @@ public class MultiLevelCache<K, V> extends AbstractCache<K, V> {
 
     private CacheResult PUT_caches(int lastIndex, K key, V value, long expire, TimeUnit timeUnit) {
         CompletableFuture<ResultData> future = CompletableFuture.completedFuture(null);
+        /**
+         * 多级缓存存入
+         * 1 如果是分布式缓存，可能需要在客户端加锁的！
+         * 2 全部缓存会存一遍
+          */
         for (int i = 0; i < lastIndex; i++) {
             Cache cache = caches[i];
             CacheResult r;

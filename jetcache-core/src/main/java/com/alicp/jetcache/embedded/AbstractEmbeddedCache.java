@@ -20,6 +20,10 @@ public abstract class AbstractEmbeddedCache<K, V> extends AbstractCache<K, V> {
     protected EmbeddedCacheConfig<K, V> config;
     protected InnerMap innerMap;
 
+    /**
+     * 关键点：缓存，本质是个Map，但这个Map可能比较复杂
+     * @return
+     */
     protected abstract InnerMap createAreaCache();
 
     public AbstractEmbeddedCache(EmbeddedCacheConfig<K, V> config) {

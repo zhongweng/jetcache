@@ -19,6 +19,7 @@ public class ConfigSelector extends AdviceModeImportSelector<EnableMethodCache> 
             case PROXY:
                 return getProxyImports();
             case ASPECTJ:
+                //todo 注释掉了
 //                return getAspectJImports();
             default:
                 return null;
@@ -37,6 +38,7 @@ public class ConfigSelector extends AdviceModeImportSelector<EnableMethodCache> 
     }
 
     /**
+     * 对于AspectJ 不再支持import
      * Return the imports to use if the {@link AdviceMode} is set to {@link AdviceMode#ASPECTJ}.
      * <p>Take care of adding the necessary JSR-107 import if it is available.
      */

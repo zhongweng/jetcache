@@ -10,6 +10,8 @@ import java.lang.reflect.Proxy;
 
 /**
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * 自定义 Bean 的生成, 可以再次对bean做代理包装
  */
 public class MyFactoryBean implements FactoryBean, InitializingBean {
 
@@ -27,8 +29,14 @@ public class MyFactoryBean implements FactoryBean, InitializingBean {
         return true;
     }
 
+    /**
+     * 初始化配置后调用
+     * @throws Exception
+     */
     public void afterPropertiesSet() throws Exception {
         final FactoryBeanTarget SRC = new FactoryBeanTargetImpl();
+
+        // 创建代理
         target = (FactoryBeanTarget) Proxy.newProxyInstance(this.getClass().getClassLoader(),
                 new Class<?>[]{FactoryBeanTarget.class},
                 (proxy, method, args) -> method.invoke(SRC, args));

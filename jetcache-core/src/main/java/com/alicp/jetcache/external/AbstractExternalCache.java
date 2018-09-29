@@ -10,6 +10,9 @@ import java.io.IOException;
  * Created on 2016/10/8.
  *
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * 与嵌入的cache的区别：嵌入的都是本地缓存，而externalCache的是远程缓存
+ * 则需要 编码和解码器
  */
 public abstract class AbstractExternalCache<K, V> extends AbstractCache<K, V> {
 
@@ -44,6 +47,7 @@ public abstract class AbstractExternalCache<K, V> extends AbstractCache<K, V> {
                     newKey = config.getKeyConvertor().apply(key);
                 }
             }
+            // 创建带前缀的key
             return ExternalKeyUtil.buildKeyAfterConvert(newKey, config.getKeyPrefix());
         } catch (IOException e) {
             throw new CacheException(e);

@@ -8,9 +8,9 @@ import com.alicp.jetcache.anno.support.CacheAnnoConfig;
 
 import java.lang.reflect.Method;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
+ * 将invoke的参数整合到了一个model中了
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
  */
 public class CacheInvokeContext {

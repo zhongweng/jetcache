@@ -27,12 +27,12 @@ public abstract class AbstractCacheTest {
 
         // get/put/getByMethodInfo
         Assert.assertEquals(CacheResultCode.NOT_EXISTS, cache.GET("BASE_K1").getResultCode());
-        Assert.assertEquals(CacheResultCode.SUCCESS, cache.PUT("BASE_K1", "V1", 10, TimeUnit.SECONDS).getResultCode());
+        Assert.assertEquals(CacheResultCode.SUCCESS, cache.PUT("BASE_K1", "V1", 100, TimeUnit.SECONDS).getResultCode());
         Assert.assertEquals(CacheResultCode.SUCCESS, cache.GET("BASE_K1").getResultCode());
         Assert.assertEquals("V1", cache.GET("BASE_K1").getValue());
 
         // update
-        Assert.assertEquals(CacheResultCode.SUCCESS, cache.PUT("BASE_K1", "V2", 10, TimeUnit.SECONDS).getResultCode());
+        Assert.assertEquals(CacheResultCode.SUCCESS, cache.PUT("BASE_K1", "V2", 100, TimeUnit.SECONDS).getResultCode());
         Assert.assertEquals("V2", cache.GET("BASE_K1").getValue());
 
         //remove

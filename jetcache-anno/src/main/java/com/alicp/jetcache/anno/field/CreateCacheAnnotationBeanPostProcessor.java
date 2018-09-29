@@ -113,6 +113,11 @@ public class CreateCacheAnnotationBeanPostProcessor extends AutowiredAnnotationB
         }
     }
 
+    /**
+     * todo CreateCache 注解的解析，主要是field上的
+     * @param clazz
+     * @return
+     */
     private InjectionMetadata buildAutowiringMetadata(final Class<?> clazz) {
         LinkedList<InjectionMetadata.InjectedElement> elements = new LinkedList<InjectionMetadata.InjectedElement>();
         Class<?> targetClass = clazz;
@@ -170,6 +175,9 @@ public class CreateCacheAnnotationBeanPostProcessor extends AutowiredAnnotationB
 
         @Override
         protected void inject(Object bean, String beanName, PropertyValues pvs) throws Throwable {
+            /**
+             * todo 关键点 CreateCache的解析
+             */
             beanFactory.registerDependentBean(beanName, "globalCacheConfig");
             LazyInitCache cache = new LazyInitCache(beanFactory, ann, field);
             field.setAccessible(true);

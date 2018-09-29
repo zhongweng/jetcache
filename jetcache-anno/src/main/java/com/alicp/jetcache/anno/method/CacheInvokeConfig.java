@@ -3,14 +3,12 @@
  */
 package com.alicp.jetcache.anno.method;
 
-import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.support.CacheInvalidateAnnoConfig;
 import com.alicp.jetcache.anno.support.CacheUpdateAnnoConfig;
 import com.alicp.jetcache.anno.support.CachedAnnoConfig;
 
-import java.util.function.Function;
-
 /**
+ * 当前invode的注解信息
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
  */
 public class CacheInvokeConfig {

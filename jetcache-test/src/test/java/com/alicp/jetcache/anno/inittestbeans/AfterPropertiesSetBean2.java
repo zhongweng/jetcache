@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 public class AfterPropertiesSetBean2 extends CreateCacheInitTestBean implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
+        System.out.println(">>>AfterPropertiesSetBean2");
         super.doTest();
+        System.out.println("<<<AfterPropertiesSetBean2");
+
     }
 }

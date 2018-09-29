@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
+ * Cache注解解析后的model
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
  */
 public class CachedAnnoConfig extends CacheAnnoConfig {

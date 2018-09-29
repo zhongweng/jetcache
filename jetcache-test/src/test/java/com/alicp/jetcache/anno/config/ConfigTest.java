@@ -105,13 +105,24 @@ public class ConfigTest implements ApplicationContextAware {
             return new MyFactoryBean();
         }
 
+        /**
+         * 重点: 如何通过SpringConfigProvider 创建 GlobalCacheConfig
+         * GlobalCacheConfig 是本地缓存builder 远程缓存builder configProvider 的汇总
+         * SpringConfigProvider 注解支持类 关键是持有ApplicationContext, 可以创建 SpringCacheContext
+         * SpringCacheContext 包含了运行时的所有数据信息
+         * @param configProvider
+         * @return
+         */
         @Bean
         public GlobalCacheConfig config(SpringConfigProvider configProvider) {
+
             Map localFactories = new HashMap();
             EmbeddedCacheBuilder localFactory = LinkedHashMapCacheBuilder.createLinkedHashMapCacheBuilder()
                     .limit(20).keyConvertor(FastjsonKeyConvertor.INSTANCE).expireAfterWrite(50, TimeUnit.MILLISECONDS);
+
             EmbeddedCacheBuilder localFactory2 = LinkedHashMapCacheBuilder.createLinkedHashMapCacheBuilder()
                     .limit(10).keyConvertor(FastjsonKeyConvertor.INSTANCE).expireAfterAccess(60, TimeUnit.MILLISECONDS);
+
             localFactories.put(CacheConsts.DEFAULT_AREA, localFactory);
             localFactories.put("A1", localFactory2);
 

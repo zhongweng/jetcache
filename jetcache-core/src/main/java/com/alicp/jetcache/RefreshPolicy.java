@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
  * Created on 2017/5/25.
  *
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * 定时刷新的缓存策略
  */
 public class RefreshPolicy implements Cloneable {
 

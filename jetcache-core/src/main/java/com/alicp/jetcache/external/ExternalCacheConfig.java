@@ -13,7 +13,13 @@ import java.util.function.Function;
  */
 public class ExternalCacheConfig<K, V> extends CacheConfig<K, V> {
     private String keyPrefix;
+    /**
+     * 默认编码器 Object to byte[]
+     */
     private Function<Object, byte[]> valueEncoder = JavaValueEncoder.INSTANCE;
+    /**
+     * 默认解码器 byte[] to Object
+     */
     private Function<byte[], Object> valueDecoder = SpringJavaValueDecoder.defaultJavaValueDecoder();
 
     public String getKeyPrefix() {

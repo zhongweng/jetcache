@@ -8,10 +8,13 @@ import java.util.function.Function;
  * Created on 16/9/7.
  *
  * @author <a href="mailto:areyouok@gmail.com">huangli</a>
+ *
+ * 根据 CacheConfig 创建不同的 Cache
  */
 public abstract class AbstractCacheBuilder<T extends AbstractCacheBuilder<T>> implements CacheBuilder, Cloneable {
 
     protected CacheConfig config;
+    // 注入了一个创建方法
     private Function<CacheConfig, Cache> buildFunc;
 
     public CacheConfig getConfig() {
@@ -43,12 +46,15 @@ public abstract class AbstractCacheBuilder<T extends AbstractCacheBuilder<T>> im
             throw new CacheConfigException("no buildFunc");
         }
         beforeBuild();
+        // 直接是 clone 一份
         CacheConfig c = getConfig().clone();
         Cache<K, V> cache = buildFunc.apply(c);
         if (c.getLoader() != null) {
             if (c.getRefreshPolicy() == null) {
+                // 包装一层，成为加载缓存
                 cache = new LoadingCache<>(cache);
             } else {
+                // 包装一层，成为定时刷新缓存
                 cache = new RefreshCache<>(cache);
             }
         }
